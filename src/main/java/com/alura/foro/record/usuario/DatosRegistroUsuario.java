@@ -1,5 +1,8 @@
 package com.alura.foro.record.usuario;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -16,7 +19,14 @@ public record DatosRegistroUsuario (
 		String email,
 		@NotEmpty
 		@NotBlank
-		@Size(min= 8,max=30)
+		@Size(min= 8)
 		String contrasena) {
+		
+	private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    public DatosRegistroUsuario(String nombre, String email, String contrasena) {
+        this.nombre = nombre;
+        this.email = email;
+        this.contrasena = passwordEncoder.encode(contrasena);
+    }
 }
